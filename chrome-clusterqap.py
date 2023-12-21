@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 ANO_PROPOSTA = '2023'
-UF = 'MA'
+UF = 'SE'
 
 """ Ignore certificate to bypass error """
 options = webdriver.ChromeOptions()
@@ -28,7 +28,7 @@ time.sleep(2)
 consulta_personalizada_btn = driver.find_element('xpath', '//a[contains(text(), "Consulta Personalizada")]')
 consulta_personalizada_btn.click()
 
-time.sleep(5)
+time.sleep(3)
 
 
 """ Selecionar Ano Proposta """
@@ -52,17 +52,46 @@ uf_escolhida = wait.until(EC.element_to_be_clickable((By.XPATH, '//span[@id=0]')
 actions.move_to_element(uf_escolhida).click().perform()
 confirm_uf = driver.find_element(By.XPATH, '//button[@title="Confirmar seleção" and @data-testid="actions-toolbar-confirm"]')
 actions.move_to_element(confirm_uf).click().perform()
+time.sleep(1)
 
 """ Selecionar Dimensões """
-modalidade = wait.until(EC.element_to_be_clickable((By.XPATH, '//span[contains(text(), "Modalidade")]')))
-actions.move_to_element(modalidade).click().perform()
+dimensoes = ['Órgão Concedente', 'UF', 'Município', 'Código IBGE', 'Código Programa', 'Nome Programa', 'Nº Proposta', 'Situação Proposta']
+dim_btn = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[contains(text(), "Dimensão")]')))
+actions.move_to_element(dim_btn).click().perform()
+time.sleep(0.5)
+
+for dim in dimensoes:
+    keyboard.write(dim)
+    dim_escolhida = wait.until(EC.element_to_be_clickable((By.XPATH, '//span[@title="'+dim+'"]')))
+    actions.move_to_element(dim_escolhida).click().perform()
+    clear_btn = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="lui-search__clear-button"]')))
+    actions.move_to_element(clear_btn).click().perform()
+    time.sleep(0.5)
+    dim_input = wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@placeholder="Pesquisar na caixa de listagem"]')))
+    actions.move_to_element(dim_input).click().perform()
+    time.sleep(0.3)
+
 # Confirmar seleção
 confirm_btn_dim = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="sel-toolbar-btn ng-scope sel-toolbar-confirm" and @title="Confirmar seleção"]')))
 actions.move_to_element(confirm_btn_dim).click().perform()
 
-""" Selecionar Métricas """
-vl_emenda = wait.until(EC.element_to_be_clickable((By.XPATH, '//span[contains(text(), "Qtd. Programa")]')))
-actions.move_to_element(vl_emenda).click().perform()
+# """ Selecionar Métricas """
+metricas = ['Qtd. Propostas', 'VL Global Prop', 'VL Repasse Prop']
+met_btn = wait.until(EC.element_to_be_clickable((By.XPATH, '//div[contains(text(), "Medida")]')))
+actions.move_to_element(met_btn).click().perform()
+time.sleep(0.5)
+
+for met in metricas:
+    keyboard.write(met)
+    met_escolhida = wait.until(EC.element_to_be_clickable((By.XPATH, '//span[@title="'+met+'"]')))
+    actions.move_to_element(met_escolhida).click().perform()
+    clear_btn = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="lui-search__clear-button"]')))
+    actions.move_to_element(clear_btn).click().perform()
+    time.sleep(0.5)
+    met_input = wait.until(EC.element_to_be_clickable((By.XPATH, '//input[@placeholder="Pesquisar na caixa de listagem"]')))
+    actions.move_to_element(met_input).click().perform()
+    time.sleep(0.3)
+
 # Confirmar seleção
 confirm_btn_met = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="sel-toolbar-btn ng-scope sel-toolbar-confirm" and @title="Confirmar seleção"]')))
 actions.move_to_element(confirm_btn_met).click().perform()
